@@ -36,7 +36,7 @@ def show_main(request):
             {
                 'name': 'Gasoline',
                 'owner': 'Unknown',
-                'type': 'Flamable',
+                'type': 'Flammable',
                 'ammount': '2',
                 'weight': '5.7'
             },
@@ -44,7 +44,7 @@ def show_main(request):
                 {
                     'name': 'Diesel',
                     'owner': 'Unknown',
-                    'type': 'Flamable',
+                    'type': 'Flammable',
                     'ammount': '3',
                     'weight': '9.6'
                 }
