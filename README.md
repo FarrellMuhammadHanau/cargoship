@@ -1,7 +1,7 @@
 link utama: https://cargoship.adaptable.app
 link main : https://cargoship.adaptable.app/main
 
-1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+#### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
     - Membuat sebuah projek Django baru
         + Membuat direktori baru dengan nama cargoship
         + Menginisialisasi direktori tersebut menjadi repositori git dengan perintah "git init"
@@ -250,24 +250,24 @@ link main : https://cargoship.adaptable.app/main
             + Menyesuaikan versi python yang ada pada lokal ("Versi 3.10") lalu pada bagian "Start Command" tambahkan perintah "python manage.py migrate && gunicorn cargoship.wsgi"
             + Memasukan nama aplikasi dan mencentang "HTTP Listener on Port" lalu menekan tombol "Deploy App"
 
-2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara "urls.py", "views.py", "models.py" dan berkas html.
+#### 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara "urls.py", "views.py", "models.py" dan berkas html.
 
-3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
-    Virtual environment merupakan suatu ruang lingkup virtual yang memungkinkan kita untuk mengisolasi dependencies yang kita butuhkan dengan dependencies yang ada pada mesin lokal. Fitur ini sangat berguna karena aplikasi web yang kita buat terkadang membutuhkan versi dependencies yang berbeda dengan yang ada pada komputer kita. Namun meskipun begitu, kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment dengan syarat bahwa versi dependencies yang digunakan dalam membuat aplikasi web tersebut sama dengan versi dependencies yang ada pada mesin lokal. 
+#### 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
+    *Virtual environment* merupakan suatu ruang lingkup virtual yang memungkinkan kita untuk mengisolasi *dependencies* yang kita butuhkan dengan *dependencies* yang ada pada mesin lokal. Fitur ini sangat berguna karena aplikasi web yang kita buat terkadang membutuhkan versi *dependencies* yang berbeda dengan yang ada pada komputer kita. Namun meskipun begitu, kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan *virtual environment* dengan syarat bahwa versi *dependencies* yang digunakan dalam membuat aplikasi web tersebut sama dengan versi *dependencies* yang ada pada mesin lokal. 
 
-4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
+#### 4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
     MVC (Model-View-Control), MVT (Model-View-Template), dan MVVM (Model-View-ViewModel) merupakan pola desain yang digunakan dalam mendesain suatu software. Elemen-elemen pada software dipisah sesuai dengan pola desain tersebut untuk memudahkan developer dalam mengelola dan mengembahkan software tersebut.
     - MVC membagi komponen-komponen aplikasi menjadi:
         + Model berfungsi dalam mengelola data
-        + View berfungsi dalam mengatur User Interface atau UI dari suatu aplikasi 
-        + Control berfungsi sebagai penghubung antara Model dengan View. Control dapat memanipulasi data menggunakan model dan me-render hasil akhir sesuai dengan view.
+        + View berfungsi dalam mengatur *User Interface* atau *UI* dari suatu aplikasi 
+        + Control berfungsi sebagai penghubung antara Model dengan View. Control dapat memanipulasi data menggunakan model dan me-*render* hasil akhir sesuai dengan view.
     - MVT membagi komponen-komponen aplikasi menjadi:
         + Model berfungsi dalam mengelola data
         + View berfungsi sebagai penghubung antara Model dan Template. View dapat mengambil data dari basis data melalui Model dan menampilkan data tersebut menggunakan Template
         + Template berfungsi dalam mengatur tampilan dan menampilkan data melalui View
     - MVVM membagi komponen-komponen aplikasi menjadi:
         + Model berfungsi dalam mengelola data
-        + View berfungsi dalam mengatur User Interface dan terhubung dengan ViewModel melalui Data Binding
+        + View berfungsi dalam mengatur User Interface dan terhubung dengan ViewModel melalui *Data Binding*
         + ViewModel berfungsi dalam menghubungkan Model dengan View
     Perbedaan ketiga pola desain tersebut terletak pada elemen penghubungnya dimana pada MVC, elemen penghubung terletak pada Control, pada MVT, elemen penghubungnya adalah View, sementara pada MVVM, elemen penghubungnya pada ViewModel. Selain itu, pada MVC, hubungan antara View dan Control satu arah sementara pada MVVM, hubungan antara View dan ViewModel dua arah karena adanya Data Binding
 
