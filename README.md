@@ -118,7 +118,7 @@ link main : https://cargoship.adaptable.app/main
 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara "urls.py", "views.py", "models.py" dan berkas html.
 
     ![Alt text](image.png)
-    - URLS atau urls.py merupakan bagian yang menentukan pola url aplikasi. pola url ini akan merujuk pada View dari aplikasi tersebut.
+    - URLS atau urls.py merupakan bagian yang menentukan pola url aplikasi. Pola url ini akan merujuk pada Views dari aplikasi tersebut.
     - Views atau views.py akan menampilkan laman sesuai dengan Template yang dipilih dengan data yang sesuai dengan Model.
     - Template menentukan tampilan dari website dan dapat menampilkan data yang didapat melewati Views
     - Model atau models.py menentukan bentuk atau struktur dari data pada *database*
