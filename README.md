@@ -104,6 +104,9 @@ link main : https://cargoship.adaptable.app/main
             + Membuat folder "templates" pada direktori "main" dan di dalamnya, membuat file "main.html"
             + Mengisi main.html dengan nama, kelas, dan Item yang ada dalam context. Karena dalam context terdapat beberapa Item, maka dapat menggunakan for-each loop untuk mengambil setiap Item dari dalam masing-masing "cargo"
             + Mengecek apakah tampilan sudah sesuai dengan keinginan dengan menjalankan server dan mengunjungi http://127.0.0.1:8000/main
+        - Membuat sebuah routing pada "urls.py" aplikasi main untuk memetakan fungsi yang telah di buat pada "views.py"
+            + Mengimport "path" dari "django.urls" dan show_main dari "main.views"
+            + menambahkan *path* baru pada pada variable "urlpatterns" dengan cara menambahkan "path('', show_main, name='show_main')"
         - Melakukan deployment ke Adaptable terhadap aplikasi yang sudah dibuat
             + Menghubungkan repositori lokal dengan repositori github dengan perintah "git remote add origin https://github.com/FarrellMuhammadHanau/cargoship.git"
             + Menyimpan repositori lokal / perubahan repositori lokal ke github dengan perintah "git add ." untuk menandai bahwa semua file siap untuk di commit, lalu "git commit -u <komentar>" untuk menyimpan perubahan lalu menyimpannya ke dalam github dengan perintah "git push -u origin main".
@@ -113,6 +116,9 @@ link main : https://cargoship.adaptable.app/main
             + Memasukan nama aplikasi dan mencentang "HTTP Listener on Port" lalu menekan tombol "Deploy App"
 
 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara "urls.py", "views.py", "models.py" dan berkas html.
+
+    ![Alt text](image.png)
+    
 
 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
 
