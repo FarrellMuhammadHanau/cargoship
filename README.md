@@ -1,7 +1,11 @@
+link utama: https://cargoship.adaptable.app
+link main : https://cargoship.adaptable.app/main
+
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
     - Membuat sebuah projek Django baru
         + Membuat direktori baru dengan nama cargoship
         + Menginisialisasi direktori tersebut menjadi repositori git dengan perintah "git init"
+        + Membuat repositori github baru dengan nama "cargoship" dan visibility public
         + Membuat virtual environment pada repo tersebut dengan perintah "python -m venv env"
         + Membuat file teks baru dengan nama "requirements.txt" lalu mengisinya dengan beberapa dependencies sesuai dengan keperluan
             ```
@@ -239,4 +243,33 @@
             + Mengisi main.html dengan nama, kelas, dan Item yang ada dalam context. Karena dalam context terdapat beberapa Item, maka dapat menggunakan for-each loop untuk mengambil setiap Item dari dalam masing-masing "cargo"
             + Mengecek apakah tampilan sudah sesuai dengan keinginan dengan menjalankan server dan mengunjungi http://127.0.0.1:8000/main
         - Melakukan deployment ke Adaptable terhadap aplikasi yang sudah dibuat
-        
+            + Menghubungkan repositori lokal dengan repositori github dengan perintah "git remote add origin https://github.com/FarrellMuhammadHanau/cargoship.git"
+            + Menyimpan repositori lokal / perubahan repositori lokal ke github dengan perintah "git add ." untuk menandai bahwa semua file siap untuk di commit, lalu "git commit -u <komentar>" untuk menyimpan perubahan lalu menyimpannya ke dalam github dengan perintah "git push -u origin main".
+            + Setelah itu membuka web Adaptable.io lalu tekan tombol "new app" dan pilih "Connect an Existing Repository" Lalu pilih repo "cargoship"
+            + Setelah itu pilih "Python App Template" sebagai template dan "PostgreSQL" sebagai basis data
+            + Menyesuaikan versi python yang ada pada lokal ("Versi 3.10") lalu pada bagian "Start Command" tambahkan perintah "python manage.py migrate && gunicorn cargoship.wsgi"
+            + Memasukan nama aplikasi dan mencentang "HTTP Listener on Port" lalu menekan tombol "Deploy App"
+
+2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara "urls.py", "views.py", "models.py" dan berkas html.
+
+3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
+    Virtual environment merupakan suatu ruang lingkup virtual yang memungkinkan kita untuk mengisolasi dependencies yang kita butuhkan dengan dependencies yang ada pada mesin lokal. Fitur ini sangat berguna karena aplikasi web yang kita buat terkadang membutuhkan versi dependencies yang berbeda dengan yang ada pada komputer kita. Namun meskipun begitu, kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment dengan syarat bahwa versi dependencies yang digunakan dalam membuat aplikasi web tersebut sama dengan versi dependencies yang ada pada mesin lokal. 
+
+4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya.
+    MVC (Model-View-Control), MVT (Model-View-Template), dan MVVM (Model-View-ViewModel) merupakan pola desain yang digunakan dalam mendesain suatu software. Elemen-elemen pada software dipisah sesuai dengan pola desain tersebut untuk memudahkan developer dalam mengelola dan mengembahkan software tersebut.
+    - MVC membagi komponen-komponen aplikasi menjadi:
+        + Model berfungsi dalam mengelola data
+        + View berfungsi dalam mengatur User Interface atau UI dari suatu aplikasi 
+        + Control berfungsi sebagai penghubung antara Model dengan View. Control dapat memanipulasi data menggunakan model dan me-render hasil akhir sesuai dengan view.
+    - MVT membagi komponen-komponen aplikasi menjadi:
+        + Model berfungsi dalam mengelola data
+        + View berfungsi sebagai penghubung antara Model dan Template. View dapat mengambil data dari basis data melalui Model dan menampilkan data tersebut menggunakan Template
+        + Template berfungsi dalam mengatur tampilan dan menampilkan data melalui View
+    - MVVM membagi komponen-komponen aplikasi menjadi:
+        + Model berfungsi dalam mengelola data
+        + View berfungsi dalam mengatur User Interface dan terhubung dengan ViewModel melalui Data Binding
+        + ViewModel berfungsi dalam menghubungkan Model dengan View
+    Perbedaan ketiga pola desain tersebut terletak pada elemen penghubungnya dimana pada MVC, elemen penghubung terletak pada Control, pada MVT, elemen penghubungnya adalah View, sementara pada MVVM, elemen penghubungnya pada ViewModel. Selain itu, pada MVC, hubungan antara View dan Control satu arah sementara pada MVVM, hubungan antara View dan ViewModel dua arah karena adanya Data Binding
+
+## Referensi:
+Gallardo, Estefania Garcia. (2023). *What is MVVM Architecture?*. Retrieved from https://builtin.com/software-engineering-perspectives/mvvm-architecture
