@@ -4,6 +4,8 @@
     <head></head>
     <body>
         <h1>CargoShip</h1>
+        <h3>Nama: Farrell Muhammad Hanau</h3>
+        <h3>Kelas: PBP-C</h3>
         <br>
         <h2>Shipper: Efemeitch Express</h2>
         
@@ -17,17 +19,17 @@
                 <td>Weight</td>
             </tr>
             <tr>
-                {% for key, value in Cargo1.Goods1.items %}
+                {% for key, value in Cargo1.Item1.items %}
                     <td>{{value}}</td>
                 {% endfor %}
             </tr>
             <tr>
-                {% for key, value in Cargo1.Goods2.items %}
+                {% for key, value in Cargo1.Item2.items %}
                     <td>{{value}}</td>
                 {% endfor %}
             </tr>
             <tr>
-                {% for key, value in Cargo1.Goods3.items %}
+                {% for key, value in Cargo1.Item3.items %}
                     <td>{{value}}</td>
                 {% endfor %}
             </tr>
@@ -43,12 +45,12 @@
                 <td>Weight</td>
             </tr>
             <tr>
-                {% for key, value in Cargo2.Goods1.items %}
+                {% for key, value in Cargo2.Item1.items %}
                     <td>{{value}}</td>
                 {% endfor %}
             </tr>
             <tr>
-                {% for key, value in Cargo2.Goods2.items %}
+                {% for key, value in Cargo2.Item2.items %}
                     <td>{{value}}</td>
                 {% endfor %}
             </tr>

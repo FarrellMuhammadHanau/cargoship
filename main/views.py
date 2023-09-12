@@ -5,7 +5,7 @@ def show_main(request):
     context = {
         'Cargo1':
         {
-            'Goods1': 
+            'Item1': 
             {
                 'name': 'Tomato',
                 'owner': 'Farrell',
@@ -13,7 +13,7 @@ def show_main(request):
                 'ammount': '10',
                 'weight': '1.3'
             },
-            'Goods2':
+            'Item2':
             {
                 'name': 'Spoon',
                 'owner': 'Farrell',
@@ -21,7 +21,7 @@ def show_main(request):
                 'ammount': '8',
                 'weight': '0.8'
             },
-            'Goods3':
+            'Item3':
             {
                 'name': 'Phone',
                 'owner': 'Hanau',
@@ -32,7 +32,7 @@ def show_main(request):
         },
         'Cargo2':
         {
-            'Goods1':
+            'Item1':
             {
                 'name': 'Gasoline',
                 'owner': 'Unknown',
@@ -40,7 +40,7 @@ def show_main(request):
                 'ammount': '2',
                 'weight': '5.7'
             },
-            'Goods2':
+            'Item2':
                 {
                     'name': 'Diesel',
                     'owner': 'Unknown',
