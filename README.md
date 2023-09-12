@@ -122,8 +122,8 @@ link main : https://cargoship.adaptable.app/main
     - URLS atau urls.py merupakan bagian yang menentukan pola url aplikasi. Pola url ini akan merujuk pada Views dari aplikasi tersebut.
     - Views atau views.py akan menampilkan laman sesuai dengan Template yang dipilih dengan data yang sesuai dengan Model.
     - Template menentukan tampilan dari website dan dapat menampilkan data yang didapat melewati Views
-    - Model atau models.py menentukan bentuk atau struktur dari data pada *database*
-    - Database merupakan tempat dimana data-data disimpan
+    - Model atau models.py menentukan bentuk atau struktur dari data-data yang ada pada database
+    - Database merupakan tempat dimana data-data aplikasi disimpan
 
 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment?
 
