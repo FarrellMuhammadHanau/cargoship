@@ -1,54 +1,56 @@
 from django.shortcuts import render
+from main.models import Container, Item
+from main.forms import ItemForm, ContainerForm
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+from django.core import serializers
 
 # Create your views here.
 def show_main(request):
+    containers = Container.objects.all()
     context = {
-        'Cargo1':
-        {
-            'Item1': 
-            {
-                'name': 'Tomato',
-                'owner': 'Farrell',
-                'type': 'Consumable',  
-                'ammount': '10',
-                'weight': '1.3'
-            },
-            'Item2':
-            {
-                'name': 'Spoon',
-                'owner': 'Farrell',
-                'type': 'Tools',  
-                'ammount': '8',
-                'weight': '0.8'
-            },
-            'Item3':
-            {
-                'name': 'Phone',
-                'owner': 'Hanau',
-                'type': 'Electronic',
-                'ammount': '5',
-                'weight': '1'
-            }
-        },
-        'Cargo2':
-        {
-            'Item1':
-            {
-                'name': 'Gasoline',
-                'owner': 'Unknown',
-                'type': 'Flammable',
-                'ammount': '2',
-                'weight': '5.7'
-            },
-            'Item2':
-                {
-                    'name': 'Diesel',
-                    'owner': 'Unknown',
-                    'type': 'Flammable',
-                    'ammount': '3',
-                    'weight': '9.6'
-                }
-        }
+        'name': 'Farrell Muhammad Hanau',
+        'class': 'PBP-C',
+        'shipper': 'EfEmEitch Express',
+        'containers': containers
+
     }
 
     return render (request, 'main.html', context)
+
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+
+def create_container(request):
+    form = ContainerForm(request.POST or None)
+    if form.is_valid() and request.method == "POST":
+        name = form.cleaned_data['name']
+        if (name not in [container.name for container in Container.objects.all()]):
+            form.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {'form': form}
+    return render(request, "create_container.html", context)
+
+def show_json(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
