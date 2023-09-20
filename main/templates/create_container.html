@@ -12,6 +12,21 @@
             <td>
                 <input type="submit" value="Add Container"/>
             </td>
+            <p id="message" style="display: none;" data={{exist}}>Container already exist!</p>
+            <script>
+                window.onload = function(){
+                    let message = document.getElementById("message")
+                    let isExist = message.getAttribute("data")
+                    
+                    if (isExist === "True") {
+                        message.style.display = "block"
+                    }
+                    else {
+                        message.style.display = "none"
+                    }
+                }
+
+            </script>
         </tr>
     </table>
 </form>

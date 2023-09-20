@@ -30,13 +30,16 @@ def create_item(request):
 
 def create_container(request):
     form = ContainerForm(request.POST or None)
+    isAlreadyExist = False
     if form.is_valid() and request.method == "POST":
         name = form.cleaned_data['name']
         if (name not in [container.name for container in Container.objects.all()]):
             form.save()
             return HttpResponseRedirect(reverse('main:show_main'))
+        isAlreadyExist = True
+
     
-    context = {'form': form}
+    context = {'form': form, 'exist':form.is_valid()}
     return render(request, "create_container.html", context)
 
 def show_json(request):
