@@ -582,11 +582,11 @@ Gallardo, Estefania Garcia. (2023). *What is MVVM Architecture?*. Retrieved from
             'total_item': total_item
         }
         ```
-    + Pada logout, akan didelete cookies 'last_login' yang telah dibuat
-    ```
-    def logout_user(request):
-        logout(request)
-        response = HttpResponseRedirect(reverse('main:login'))
-        response.delete_cookie('last_login')
-        return response
-    ```
+        + Pada logout, akan didelete cookies 'last_login' yang telah dibuat
+        ```
+        def logout_user(request):
+            logout(request)
+            response = HttpResponseRedirect(reverse('main:login'))
+            response.delete_cookie('last_login')
+            return response
+        ```
