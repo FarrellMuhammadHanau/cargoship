@@ -6,8 +6,8 @@
     <h3>Name: {{name}}</h3>
     <h3>Class: {{class}}</h3>
     <br>
-    <h2>{{shipper}}</h2>
-
+    <h2>Shipper: {{shipper}}</h2>
+    <h4>Kamu menyimpan {{total_item}} item pada aplikasi ini</h4>
     {% for container in containers %}
     <h3>{{container.name}}</h3>
 
@@ -29,11 +29,30 @@
             <td>{{item.amount}}</td>
             <td>{{item.weight}}</td>
             <td>{{item.description}}</td>
+            <td>
+                <form action="{% url 'main:increment_item' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Add</button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'main:decrement_item' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Retrieve</button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'main:remove_item' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
 
     </table>
     {% endfor %}
+    <h5>Sesi terakhir login: {{last_login}}</h5>
     <br>
     <a href="{% url 'main:create_container' %}">
         <button>
@@ -46,4 +65,10 @@
             Add New Item
         </button>
     </a>
+    <br>
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
+        </button>
+    </a>    
 {% endblock content %}
