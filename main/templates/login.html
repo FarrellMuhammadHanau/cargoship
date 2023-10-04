@@ -6,40 +6,33 @@
 
 {% block content %}
 
-<div class="">
-    <div class = "login">
-    
-        <h1>Login</h1>
-    
-        <form method="POST" action="">
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <td>Username: </td>
-                    <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-                </tr>
-                        
-                <tr>
-                    <td>Password: </td>
-                    <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-                </tr>
-    
-                <tr>
-                    <td></td>
-                    <td><input class="btn login_btn" type="submit" value="Login"></td>
-                </tr>
-            </table>
-        </form>
-    
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}     
-            
-        Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+<div class="container">
+    <div class="col-md-6 offset-md-3" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <div class="login">
+            <div class="text-center">
+                <h1>Login</h1>
+            </div>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                </div>
+                <button class="btn btn-primary" type="submit">Login</button>
+            </form>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a></p>
+        </div>
     </div>
 </div>
 

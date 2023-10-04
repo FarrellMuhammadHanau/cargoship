@@ -35,24 +35,24 @@
                     <td>
                         <form action="{% url 'main:increment_item' item.id %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary">Add</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
                         </form>
                     </td>
                     <td>
                         <form action="{% url 'main:decrement_item' item.id %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary">Retrieve</button>
+                            <button type="submit" class="btn btn-primary">Retrieve</button>
                         </form>
                     </td>
                     <td>
                         <form action="{% url 'main:remove_item' item.id %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary">Remove</button>
+                            <button type="submit" class="btn btn-primary">Remove</button>
                         </form>
                     </td>
                     <td>
                         <a href="{% url 'main:edit_item' item.id %}">
-                            <button class="btn btn-secondary">
+                            <button class="btn btn-primary">
                                 Edit
                             </button>
                         </a>
