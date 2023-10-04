@@ -590,3 +590,219 @@ Gallardo, Estefania Garcia. (2023). *What is MVVM Architecture?*. Retrieved from
             response.delete_cookie('last_login')
             return response
         ```
+
+# Tugas 5
+
+1. Jelaskan manfaat dari setiap *element selector* dan kapan waktu yang tepat untuk menggunakannya.
+    Dalam html dan css, terdapat 3 selector yaitu element selector, id selector, dan class selector. Element selctor digunakan untuk mengubah property seluruh element dengan tag yang sama. ID selector digunakan untuk mengubah elemen yang memiliki atribut ID tertentu. Class selector digunakan untuk memodifikasi dan mengelompokan elemen-elemen dengan karakteristik yang sama.
+
+2. Jelaskan HTML5 tag yang kamu ketahui
+    - tag "html" menandakan awal dan akhir dari dokumen html
+    - tag "head" berisi informasi tentang dokumen html, seperti judul
+    - tag "meta" berisi metadata dokumen html
+    - tag "title" digunakan untuk menentukan judul
+    - tag "style" digunakan untuk memberikan *style* css pada elemen
+    - tag "script" merupakan tag berisi *script* javascript pada dokumen html
+    - tag "hx" merupakan tag heading dimana 1 memiliki hirarki tertinggi dan 5 hirarki terendah
+    - tag "p" merupakan tag yang berisi teks paragraf
+    - tag "div" merupakan tag yang digunakan untuk mengelompokan dan membagi beberapa elemen ke bagian-bagian
+    - tag "form" digunakan untuk membuat form html
+    - tag "ul", "ol" dan "li". "ul" dan "ol" merupakan tag yang digunakan untuk menampung beberapa item "li"
+    - tag "a" digunakan untuk membuat hyperlink
+    - tag "body" merupakan bagian utama dari web
+    -  tag "link" digunakan untuk menghubungkan file html dengan file external
+
+3. Jelaskan perbedaan antara margin dan padding
+    Pada css, terdapat beberapa properti yang digunakan untuk memberikan jarak pada suatu elemen 2 diantaranya yaitu margin dan padding. Margin digunakan untuk memberikan jarak luar yaitu jarak antara elemen satu dengan elemen lainnya. Sementara itu, padding digunakan untuk memberikan jarak dalam, yaitu jarak antara content dari elemen dengan border atau batas dari elemen.
+
+4. Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+    - Framework bootstrap adalah framework yang menyediakan komponen dan gaya yang siap digunakan. Framework ini dapat  digunakan untuk mendesain web dengan cepat karena sangat mudah digunakan dan tidak perlu menuliskan kode css.
+    - Framework Tailwind adalah framework menyediakan kelas-kelas utilitas yang telah didefinisikan. Framework ini memungkinkan pengembang untuk memegang kontrol lebih dibandingkan bootstrap.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
+    - Menambahkan bootstrap dan js pada proyek
+        + Pada "base.html" di folder "templates" pada root folder, tambahkan beberapa link dan script sebagai berikut
+        ```
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+J4jsl5c9zdLKaUk5Ae5f5b1bw6AUn5f5v8FZJoMxm6f5cH1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+        ```
+    - Kustomisasi halaman login, register, dan tambah inventori semenarik mungkin
+        + Pada base.html di folder templates yang ada di root. Tambahkan block baru yaitu block navigation sebagai berikut
+        ```
+        <body>
+            {% block navigation %}
+            {% endblock navigation %}
+
+            {% block content %}
+            {% endblock content %}
+        </body>
+        ```
+        + Pada folder templates di root, tambahkan file "navigation.html"
+        + Pada file tersebut buat navbar yang sudah disediakan oleh bootstrap. Berikut adalah isi dari file tersebut
+        ```
+        {% extends 'base.html' %}
+        {% load static %}
+
+        {% block navigation %}
+        <nav class="navbar navbar-expand-lg bg-dark-subtle pb-2 pt-2 mb-3">
+            <div class="container-fluid">
+                <span class="navbard-brand h2">CargoShip</span>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-3" >
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'main:show_main' %}">Home</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'main:create_item' %}">Create Item</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'main:create_container' %}">Create Container</a>
+                        </li>
+
+                    </ul>
+                    <span class="navbar-text ms-auto">{{shipper}}</span>
+                    <ul class="navbar-nav ms-3">
+                        <li>
+                            <button type="button" class="btn btn-danger btn-sm">
+                                <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% endblock navigation %}
+        ```
+        + Pada setiap file html di "templates/main" kecuali register.html dan login.html, ubah extends file tersebut dari "base.html" menjadi "navigation.html" untuk menambahkan fitur navigasi.
+        + pada login.html atau register.html, masukan form login/register kedalam tag div dan tambahkan beberapa atribut container pada tag div tersebut dan tambahkan beberapa style agar form tersebut berada di tengah layar.
+        + Berikut login.html
+        ```        
+        <div class="container">
+            <div class="col-md-6 offset-md-3" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+                <div class="login">
+                    <div class="text-center">
+                        <h1>Login</h1>
+                    </div>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Login</button>
+                    </form>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <p>Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a></p>
+                </div>
+            </div>
+        </div>
+        ```
+        + Berikut register.html
+        ```
+        <div class="container">
+            <div class="col-md-6 offset-md-3" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+                <div class = "login">
+                    
+                    <div class="text-center">
+                        <h1>Register</h1>  
+                    </div>
+
+                        <form method="POST" >  
+                            {% csrf_token %}  
+                            <table>  
+                                {{ form.as_table }}  
+                                <tr>  
+                                    <td></td>
+                                    <td><input type="submit" name="submit" value="Daftar" class="btn btn-primary"/></td>  
+                                </tr>  
+                            </table>  
+                        </form>
+
+                    {% if messages %}  
+                        <ul>   
+                            {% for message in messages %}  
+                                <li>{{ message }}</li>  
+                                {% endfor %}  
+                        </ul>   
+                    {% endif %}
+                </div>  
+            </div>
+        </div>
+        ```
+        + Pada create_container.html dan create_item.html tambahkan atribut 'class' dengan value 'btn btn-primary' yang digunakan untuk memberikan style button pada button submit
+        + Buat fungsi edit_item sebagai berikut
+        ```
+        def edit_item(request, id):
+        item = Item.objects.get(pk = id)
+
+        form = ItemForm(request, instance=item)
+
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        context = {'form': form,  'shipper':request.user.username}
+        return render(request, "edit_item.html", context)
+        ```
+        + Pada forms.py tambahkan beberapa kode pada constructor dari ItemForm untuk menghandle ketika form digunakan untuk membuat atau mengedit item
+        ```
+        def __init__ (self, request, instance=None):
+            if (instance is None):
+                super().__init__(request.POST or None)
+            else:
+                super().__init__(request.POST or None, instance=instance)
+
+            self.fields['container'].queryset = Container.objects.filter(user=request.user)
+        ```
+        + import fungsi view pada urls.py dan tambahkan path baru
+        ```
+        from main.views import edit_item
+        .
+        .
+        .
+        .
+        path('edit-item/<int:id>', edit_item, name='edit_item'),
+        ```
+        + Buat templates edit_item.html sebagai berikut
+        ```
+        {% extends 'navigation.html' %}
+
+        {% load static %}
+
+        {% block content %}
+
+        <h1>Edit Product</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Edit Product" class="btn btn-primary"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% endblock %}
+        ```
+
+    - Kustomisasi halaman daftar inventori menjadi lebih berwarna maupun menggunakan approach lain seperti menggunakan Card
+        + Pada show_main, tambahkan atribut class pada table dan isi valuenya dengan 'table table-bordered'
+        + Bagi row pada table menjadi 2 yaitu header row dan body row dengan menggunakan atribut 'thead' dan 'tbody'
+        + Pada button-button yang ada, tambahkan class 'btn btn-primary' untuk memberikan *style* pada button
+        + Buatlah tag style dibawah table yang berisi selector elemen td yang digunakan untuk memodifikasi setiap cell pada table agar konten dari cell berada di tengah-tengah cell tersebut dan dengan lebar yang diinginkan. 
