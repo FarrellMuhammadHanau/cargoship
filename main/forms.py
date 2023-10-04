@@ -2,9 +2,15 @@ from django.forms import ModelForm, ChoiceField
 from main.models import Item, Container
 
 class ItemForm(ModelForm):
-    def __init__ (self, request):
-        super().__init__(request.POST or None)
+    def __init__ (self, request, instance=None):
+        if (instance is None):
+            super().__init__(request.POST or None)
+        else:
+            
+            super().__init__(request.POST or None, instance=instance)
+        
         self.fields['container'].queryset = Container.objects.filter(user=request.user)
+
 
     class Meta:
         model = Item

@@ -1,74 +1,76 @@
-{% extends 'base.html' %}
+{% extends 'navigation.html' %}
 
 {% block content %}
-    <h1>CargoShip</h1>
-
-    <h3>Name: {{name}}</h3>
-    <h3>Class: {{class}}</h3>
+    <p>Name: {{name}}</p>
+    <p>Class: {{class}}</p>
     <br>
-    <h2>Shipper: {{shipper}}</h2>
-    <h4>Kamu menyimpan {{total_item}} item pada aplikasi ini</h4>
-    {% for container in containers %}
-    <h3>{{container.name}}</h3>
+    <h5>Kamu menyimpan {{total_item}} item pada aplikasi ini</h5>
+    <br>
+    <div>
+        {% for container in containers %}
+        <h5>{{container.name}}</h5>
 
-    <table border="1" cellspacing="3" cellpadding="3">
-        <tr>
-            <td>Name</td>
-            <td>Owner</td>
-            <td>Type</td>
-            <td>Ammount</td>
-            <td>Weight</td>
-            <td>Description</td>
-        </tr>
-
-        {% for item in container.item_set.all %}
-        <tr>
-            <td>{{item.name}}</td>
-            <td>{{item.owner}}</td>
-            <td>{{item.type}}</td>
-            <td>{{item.amount}}</td>
-            <td>{{item.weight}}</td>
-            <td>{{item.description}}</td>
-            <td>
-                <form action="{% url 'main:increment_item' item.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Add</button>
-                </form>
-            </td>
-            <td>
-                <form action="{% url 'main:decrement_item' item.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Retrieve</button>
-                </form>
-            </td>
-            <td>
-                <form action="{% url 'main:remove_item' item.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Remove</button>
-                </form>
-            </td>
-        </tr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td scope="col">Name</td>
+                    <td scope="col">Owner</td>
+                    <td scope="col">Type</td>
+                    <td scope="col">Ammount</td>
+                    <td scope="col">Weight</td>
+                    <td scope="col" style="width: 20%;">Description</td>
+                    <td colspan="4">Modify</td>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for item in container.item_set.all %}
+                <tr>
+                    <td>{{item.name}}</td>
+                    <td>{{item.owner}}</td>
+                    <td>{{item.type}}</td>
+                    <td>{{item.amount}}</td>
+                    <td>{{item.weight}}</td>
+                    <td>{{item.description}}</td>
+                    <td>
+                        <form action="{% url 'main:increment_item' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary">Add</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'main:decrement_item' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary">Retrieve</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'main:remove_item' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary">Remove</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="{% url 'main:edit_item' item.id %}">
+                            <button class="btn btn-secondary">
+                                Edit
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% endfor %}
+        <style>
+            td {
+                text-align: center;
+                vertical-align: middle;
+                width: 10%;
+            }
+        </style>
+    </div>
 
-    </table>
-    {% endfor %}
-    <h5>Sesi terakhir login: {{last_login}}</h5>
-    <br>
-    <a href="{% url 'main:create_container' %}">
-        <button>
-            Add New Container
-        </button>
-    </a>
-    <br>
-    <a href="{% url 'main:create_item' %}">
-        <button>
-            Add New Item
-        </button>
-    </a>
-    <br>
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>    
+    <p>Sesi terakhir login: {{last_login}}</p>
+
 {% endblock content %}

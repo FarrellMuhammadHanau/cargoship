@@ -1,7 +1,10 @@
-{% extends 'navigation.html' %} 
+{% extends 'navigation.html' %}
+
+{% load static %}
 
 {% block content %}
-<h1>Add New Item</h1>
+
+<h1>Edit Product</h1>
 
 <form method="POST">
     {% csrf_token %}
@@ -10,7 +13,7 @@
         <tr>
             <td></td>
             <td>
-                <input type="submit" value="Add Item"/>
+                <input type="submit" value="Edit Product"/>
             </td>
         </tr>
     </table>

@@ -17,6 +17,7 @@ import datetime
 def show_main(request):
     containers = Container.objects.filter(user=request.user)
     total_item = len(Item.objects.filter(user=request.user))
+
     context = {
         'name': 'Farrell Muhammad Hanau',
         'class': 'PBP-C',
@@ -37,7 +38,7 @@ def create_item(request):
         form.save()
         return HttpResponseRedirect(reverse('main:show_main'))
     
-    context = {'form': form}
+    context = {'form': form, 'shipper':request.user.username}
     return render(request, "create_item.html", context)
 
 def create_container(request):
@@ -53,7 +54,7 @@ def create_container(request):
         isAlreadyExist = True
 
     
-    context = {'form': form, 'exist':form.is_valid()}
+    context = {'form': form, 'exist':form.is_valid(), 'shipper':request.user.username}
     return render(request, "create_container.html", context)
 
 def show_json(request):
@@ -82,7 +83,7 @@ def register(request):
             messages.success(request, 'Your account has been successfully created!')
             return redirect('main:login')
         
-    context = {'form':form}
+    context = {'form':form, 'shipper':request.user.username}
     return render(request, 'register.html', context)
 
 def login_user(request):
@@ -97,9 +98,8 @@ def login_user(request):
             return response
         else:
             messages.info(request, 'Sorry, incorrect username or password. Please try again.')
-    context = {}
+    context = {'shipper':request.user.username}
     return render(request, 'login.html', context)
-
 
 def logout_user(request):
     logout(request)
@@ -137,3 +137,15 @@ def remove_item(request, id):
         item.delete()
 
     return HttpResponseRedirect(reverse('main:show_main'))
+
+def edit_item(request, id):
+    item = Item.objects.get(pk = id)
+
+    form = ItemForm(request, instance=item)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form,  'shipper':request.user.username}
+    return render(request, "edit_item.html", context)
