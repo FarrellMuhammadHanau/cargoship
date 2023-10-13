@@ -1,76 +1,237 @@
 {% extends 'navigation.html' %}
 
 {% block content %}
-    <p>Name: {{name}}</p>
-    <p>Class: {{class}}</p>
-    <br>
-    <h5>Kamu menyimpan {{total_item}} item pada aplikasi ini</h5>
-    <br>
-    <div>
-        {% for container in containers %}
-        <h5>{{container.name}}</h5>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <td scope="col">Name</td>
-                    <td scope="col">Owner</td>
-                    <td scope="col">Type</td>
-                    <td scope="col">Ammount</td>
-                    <td scope="col">Weight</td>
-                    <td scope="col" style="width: 20%;">Description</td>
-                    <td colspan="4">Modify</td>
-                </tr>
-            </thead>
+    <div class="container ms-auto">
+        <p>Name: {{name}}</p>
+        <p>Class: {{class}}</p>
+        <br>
+        <h5>Kamu menyimpan {{total_item}} item pada aplikasi ini</h5>
     
-            <tbody>
-                {% for item in container.item_set.all %}
-                <tr>
-                    <td>{{item.name}}</td>
-                    <td>{{item.owner}}</td>
-                    <td>{{item.type}}</td>
-                    <td>{{item.amount}}</td>
-                    <td>{{item.weight}}</td>
-                    <td>{{item.description}}</td>
-                    <td>
-                        <form action="{% url 'main:increment_item' item.id %}" method="POST">
+        <div class="modal fade" id="CreateItemModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="ModalTitle"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="CreateItemForm">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <div class="mb-2">
+                                <label for="name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="owner" class="col-form-label">Owner:</label>
+                                <input type="text" class="form-control" id="owner" name="owner"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="type" class="col-form-label">Type:</label>
+                                <select id="type" name="type" class="form-control">
+                                    <option value="Consumable">Consumable</option>
+                                    <option value="Tools">Tools</option>
+                                    <option value="Electronic">Electronic</option>
+                                    <option value="Fuel">Fuel</option>
+                                    <option value="Valuables">Valuables</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label for="amount" class="col-form-label">Amount:</label>
+                                <input type="number" min="1" class="form-control" id="amount" name="amount"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="weight" class="col-form-label">Weight:</label>
+                                <input type="number" min="0.01" class="form-control" id="weight" name="weight"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="description" class="col-form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description"></textarea>
+                            </div>
+                            <input type="hidden" class="form-control" id="containerID" name="containerID"></input>
                         </form>
-                    </td>
-                    <td>
-                        <form action="{% url 'main:decrement_item' item.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Retrieve</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{% url 'main:remove_item' item.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Remove</button>
-                        </form>
-                    </td>
-                    <td>
-                        <a href="{% url 'main:edit_item' item.id %}">
-                            <button class="btn btn-primary">
-                                Edit
-                            </button>
-                        </a>
-                    </td>
-                </tr>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItem()">Add Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <form id="SearchForm" class="d-flex">
+            <input type="button" class="btn btn-primary" onclick="refreshTable()" value="Search">
+            <input class="form-control" type="text" id="SearchField" name="SearchField" placeholder="Enter item name">
+            <select class="form-control" id="FilterType" name="FilterType">
+                <option value="Type" selected>Type</option>
+                <option value="Consumable">Consumable</option>
+                <option value="Tools">Tools</option>
+                <option value="Electronic">Electronic</option>
+                <option value="Fuel">Fuel</option>
+                <option value="Valuables">Valuables</option>
+            </select>
+            <select class="form-control" id="FilterOwner" name="FilterOwner">
+                <option value="Owner">Owner</option>
+                {% for owner in owners %}
+                <option value={{owner}}>{{owner}}</option>
                 {% endfor %}
-            </tbody>
-        </table>
-        {% endfor %}
-        <style>
-            td {
-                text-align: center;
-                vertical-align: middle;
-                width: 10%;
-            }
-        </style>
+            </select>
+        </form>
+        
+        <br>
+        <br>
     </div>
 
-    <p>Sesi terakhir login: {{last_login}}</p>
+    <div class="container" id="ContentTable"></div>
+
+    <script>
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value
+        async function incrementItem(itemID){
+            url = "{% url 'main:increment_item' %}"
+            const data = new FormData();
+            data.append('id', itemID);
+
+            fetch(url, {
+                method: "POST",
+                headers:  new Headers ({
+                    'X-CSRFToken': csrf,
+                }),
+                body: data
+            }).then(refreshTable)
+        }
+
+        async function decrementItem(itemID){
+            url = "{% url 'main:decrement_item' %}"
+            const data = new FormData();
+            data.append('id', itemID);
+
+            fetch(url, {
+                method: "POST",
+                headers: new Headers ({
+                    'X-CSRFToken': csrf,
+                }),
+                body: data
+            }).then(refreshTable)
+        }
+
+        async function deleteItem(itemID){
+            url = `{% url 'main:show_main' %}`
+            url += `remove-item/${itemID}`
+
+            fetch(url, {
+                method: "DELETE",
+                headers:  new Headers ({
+                    'X-CSRFToken': csrf,
+                }),
+            }).then(refreshTable)
+        }
+
+        async function addItem(){
+            fetch("{% url 'main:create_ajax' %}", {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrf,
+                },
+                body: new FormData(document.querySelector("#CreateItemForm"))
+            }).then(refreshTable)
+
+            document.getElementById("CreateItemForm").reset()
+        }
+
+        function initModal(containerName, containerID){
+            document.getElementById("ModalTitle").textContent = `Add Item To ${containerName}`
+            document.getElementById("containerID").value = containerID
+        }
+
+        async function search(){
+            const data = new FormData(document.querySelector("#SearchForm"))
+            name = data.get("SearchField")
+            type = data.get("FilterType")
+            owner = data.get("FilterOwner")
+
+            let url = "{% url 'main:get_data' %}"
+            url += `?Name=${name}&Type=${type}&Owner=${owner}`
+
+            return fetch(url, {
+                method: "GET",
+            }).then(response => response.json())
+        }
+
+        async function refreshTable(){
+            document.getElementById("ContentTable").innerHTML = ""
+            const data = await search()
+            let content = ''
+            data.forEach(container => {
+                content += `
+                <div class="container">
+                    <div class="class="row col-md-8 offset-md-2"">
+                        <div class="card bg-secondary-subtle" style="margin-bottom: 70px">
+                            <div class="card-body">
+                                <div class="text-center" style="margin-bottom: 40px;">
+                                    <h4 class="card-title">${container.name}</h4>
+                                </div>
+                                <div class="container" id="container-card">
+
+                `
+                const items = JSON.parse(container.item)
+                items.forEach(item => {
+                    content += `
+                    <div class="card bg-dark mx-auto" style="width: 18rem; margin-bottom: 20px; color: white;">
+                        <div class="card-body ms-3 mt-3">
+                            <h4 class="card-title">${item.fields.name}</h4>
+                            <p class="card-text">Owner      : ${item.fields.owner}</p>
+                            <p class="card-text">Type       : ${item.fields.type}</p>
+                            <p class="card-text">Amount    : ${item.fields.amount}</p>
+                            <p class="card-text">Weight     : ${item.fields.weight}</p>
+                            <p class="card-text">Description: ${item.fields.description}</p>
+                        </div>
+                        <div class="card-footer" style="margin-bottom: 30px">
+                            <div class="container text-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-success" style="width: 100%;" onClick="incrementItem(${item.pk})">Add</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-warning" style="width: 100%;" onClick="decrementItem(${item.pk})">Min</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-danger" style="width: 100%;" onClick="deleteItem(${item.pk})">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                })
+                        
+                content += `
+                                </div>
+                                <div class="text-center" style="margin-top: 20px;">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CreateItemModal" onclick="initModal('${container.name}', ${container.id})">Add Item</button>
+                                </div>
+                                <style>
+                                    #container-card {
+                                        display: grid;
+                                        grid-template-columns: repeat(3, 1fr);
+                                        gap: 20px;
+                                        justify-content: center;
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+            })
+            document.getElementById("ContentTable").innerHTML = content
+        }
+        
+        refreshTable()
+    </script>
+
+    <div class="container ms-auto">
+        <p>Sesi terakhir login: {{last_login}}</p>
+    </div>
 
 {% endblock content %}

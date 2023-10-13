@@ -806,3 +806,292 @@ Gallardo, Estefania Garcia. (2023). *What is MVVM Architecture?*. Retrieved from
         + Bagi row pada table menjadi 2 yaitu header row dan body row dengan menggunakan atribut 'thead' dan 'tbody'
         + Pada button-button yang ada, tambahkan class 'btn btn-primary' untuk memberikan *style* pada button
         + Buatlah tag style dibawah table yang berisi selector elemen td yang digunakan untuk memodifikasi setiap cell pada table agar konten dari cell berada di tengah-tengah cell tersebut dan dengan lebar yang diinginkan. 
+
+
+# Tugas 6
+
+1. Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
+    Pada synchronous programming, program dieksekusi satu per satu secara berurutan dimana perintah setelahnya akan menunggu hingga perintah sebelumnya selesai dieksekusi. Sementara itu, pada asynchronous programming, perintah dapat dieksekusi tanpa menghambat eksekusi program, dimana program dapat mengeksekusi perintah lain selagi menunggu perintah asynchronous selesai.
+
+2. Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+    Dalam AJAX / JavaScript, event-driven programming adalah pemrograman berbasis event (peristiwa) dimana program dapat memberi response terhadap event tersebut secara asynchronous. Dalam tugas ini, saya menggunakan paradigma ini untuk membuat button increment, decrement, remove, dan search.
+
+3. Jelaskan penerapan asynchronous programming pada AJAX
+    Pada AJAX, kita dapat mengambil data atau mengirim data dari/ke server secara asynchronous. Dengan demikian, kita dapat mengupdate halaman web tanpa harus melakukan refrehs/reload halaman.
+
+4. Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+    Fetch Api dapat digunakan tanpa harus mengimport library tambahan, ringan, berbasis promise sehingga mudah untuk dibaca. Sementara itu, jQuery kompatible untuk berbagai browser dengan abstraksi yang konsisten, serta memiliki banyak fitur. Disini, Fetch API lebih baik digunakan untuk aplikasi-aplikasi dengan browser modern sementara itu jQuerey dapat digunakan untuk aplikasi yang membutuhkan browser lama.
+
+5. Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+    
+    - Ubahlah kode cards data item agar dapat mendukung AJAX GET.
+        + Pada main.html buat tag script baru lalu buat fungsi refreshTable yang akan digunakan untuk merefresh halaman secara asynchronous
+        + Didalamnya akan di ubah isi dari table yg diinginkan
+        ```
+        async function refreshTable(){
+            document.getElementById("ContentTable").innerHTML = ""
+            const data = await search()
+            let content = ''
+            data.forEach(container => {
+                content += `
+                <div class="container">
+                    <div class="class="row col-md-8 offset-md-2"">
+                        <div class="card bg-secondary-subtle" style="margin-bottom: 70px">
+                            <div class="card-body">
+                                <div class="text-center" style="margin-bottom: 40px;">
+                                    <h4 class="card-title">${container.name}</h4>
+                                </div>
+                                <div class="container" id="container-card">
+
+                `
+                const items = JSON.parse(container.item)
+                items.forEach(item => {
+                    content += `
+                    <div class="card bg-dark mx-auto" style="width: 18rem; margin-bottom: 20px; color: white;">
+                        <div class="card-body ms-3 mt-3">
+                            <h4 class="card-title">${item.fields.name}</h4>
+                            <p class="card-text">Owner      : ${item.fields.owner}</p>
+                            <p class="card-text">Type       : ${item.fields.type}</p>
+                            <p class="card-text">Amount    : ${item.fields.amount}</p>
+                            <p class="card-text">Weight     : ${item.fields.weight}</p>
+                            <p class="card-text">Description: ${item.fields.description}</p>
+                        </div>
+                        <div class="card-footer" style="margin-bottom: 30px">
+                            <div class="container text-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-success" style="width: 100%;" onClick="incrementItem(${item.pk})">Add</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-warning" style="width: 100%;" onClick="decrementItem(${item.pk})">Min</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-danger" style="width: 100%;" onClick="deleteItem(${item.pk})">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                })
+                        
+                content += `
+                                </div>
+                                <div class="text-center" style="margin-top: 20px;">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CreateItemModal" onclick="initModal('${container.name}', ${container.id})">Add Product</button>
+                                </div>
+                                <style>
+                                    #container-card {
+                                        display: grid;
+                                        grid-template-columns: repeat(3, 1fr);
+                                        gap: 20px;
+                                        justify-content: center;
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+            })
+            document.getElementById("ContentTable").innerHTML = content
+        }
+        ```
+
+    - Lakukan pengambilan task menggunakan AJAX GET
+        + Pada tag script, buat fungsi baru search
+        + Disana akan mengambil input dari SearchForm lalu disimpan dengan membuat objek FormData
+        + Isi dari FormData tersebut akan dimasukan kedalam query parameter
+        ```
+        async function search(){
+            const data = new FormData(document.querySelector("#SearchForm"))
+            name = data.get("SearchField")
+            type = data.get("FilterType")
+            owner = data.get("FilterOwner")
+
+            let url = "{% url 'main:get_data' %}"
+            url += `?Name=${name}&Type=${type}&Owner=${owner}`
+
+            return fetch(url, {
+                method: "GET",
+            }).then(response => response.json())
+        }
+        ```
+        + Buat fungsi view pada views.py sebagai berikut
+        ```
+        def get_data(request):
+            if request.method == "GET" and "Name" in request.GET and "Type" in request.GET and "Owner" in request.GET:
+                name = request.GET.get("Name")
+                type = request.GET.get("Type")
+                owner = request.GET.get("Owner")
+                containers = Container.objects.prefetch_related('item_set').filter(user=request.user)
+
+                # Filter nama
+                if name != "":
+                    temp = containers
+                    for container in temp:
+                        isContain = False
+                        for item in container.item_set.all():
+                            if item.name == name:
+                                isContain = True
+
+                        if not isContain:
+                            containers = containers.exclude(id=container.id)
+
+                # Filter type
+                if type != "Type":
+                    temp = containers
+                    for container in temp:
+                        isContain = False
+                        for item in container.item_set.all():
+                            if item.type == type:
+                                isContain = True
+
+                        if not isContain:
+                            containers = containers.exclude(id=container.id)
+
+                # Filter owner
+                if owner != "Owner":
+                    temp = containers
+                    for container in temp:
+                        isContain = False
+                        for item in container.item_set.all():
+                            if item.owner == owner:
+                                isContain = True
+
+                        if not isContain:
+                            containers = containers.exclude(id=container.id)
+
+                
+                data = []
+                for container in containers:
+                    sub_data = {
+                        "name": container.name,
+                        "id": container.id,
+                        "item": serializers.serialize('json', container.item_set.all())
+                    }
+                    data.append(sub_data)
+
+                return HttpResponse(json.dumps(data))
+            
+            return HttpResponseBadRequest("Data tidak valid")
+        ```
+        + Import fungsi tersebut lalu tambahkan pathnya
+        ```
+        path('get-data/', get_data, name='get_data'),
+        ```
+
+    - Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item
+        + Pada main, buat modal untuk menambahkan item sebagai berikut
+        ```
+        <div class="modal fade" id="CreateItemModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="ModalTitle"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="CreateItemForm">
+                            {% csrf_token %}
+                            <div class="mb-2">
+                                <label for="name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="owner" class="col-form-label">Owner:</label>
+                                <input type="text" class="form-control" id="owner" name="owner"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="type" class="col-form-label">Type:</label>
+                                <select id="type" name="type" class="form-control">
+                                    <option value="Consumable">Consumable</option>
+                                    <option value="Tools">Tools</option>
+                                    <option value="Electronic">Electronic</option>
+                                    <option value="Fuel">Fuel</option>
+                                    <option value="Valuables">Valuables</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label for="amount" class="col-form-label">Amount:</label>
+                                <input type="number" min="1" class="form-control" id="amount" name="amount"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="weight" class="col-form-label">Weight:</label>
+                                <input type="number" min="0.01" class="form-control" id="weight" name="weight"></input>
+                            </div>
+                            <div class="mb-2">
+                                <label for="description" class="col-form-label">Description:</label>
+                                <textarea class="form-control" id="description" name="description"></textarea>
+                            </div>
+                            <input type="hidden" class="form-control" id="containerID" name="containerID"></input>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addItem()">Add Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ```
+        + Buat fungsi initModal yang akan digunakan untuk set modal tersebut sesuai container yang ingin ditambahkan itemnya pada saat button diclick
+        ```
+        function initModal(containerName, containerID){
+            document.getElementById("ModalTitle").textContent = `Add Item To ${containerName}`
+            document.getElementById("containerID").value = containerID
+        }
+        ```
+        + Buat button yang akan menampilkan modal tersebut
+        ```
+        // Didalam fungsi refreshTable
+        <div class="text-center" style="margin-top: 20px;">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#CreateItemModal" onclick="initModal('${container.name}', ${container.id})">Add Item</button>
+        </div>
+        ```
+    - Buatlah fungsi view baru untuk menambahkan item baru ke dalam basis data
+        + Pada views.py, tambahkan fungsi view berikut
+        ```
+        def create_item_ajax(request):
+            if request.method == "POST":
+                user = request.user
+                name = request.POST.get('name')
+                owner = request.POST.get('owner')
+                type = request.POST.get('type')
+                amount = request.POST.get('amount')
+                weight = request.POST.get('weight')
+                description = request.POST.get('description')
+                containerID = request.POST.get('containerID')
+                container = Container.objects.get(id=containerID)
+
+                item = Item(user=user, name=name, owner=owner, type=type, amount=amount, weight=weight, description=description, container=container)
+                item.save()
+
+                return HttpResponse(b"CREATED", status=201)
+            
+            return HttpResponseNotFound()
+        ```
+    - Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat
+        + Pada urls.py, import create_item_ajax dari views.py lalu tambahkan path berikut
+        ```
+        path('create-ajax', create_item_ajax, name='create_ajax')
+        ```
+    - Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/
+        + Buat fungsi add item yang akan menyimpan dan mereset isi dari form modal tersebut
+        ```
+        async function addItem(){
+            fetch("{% url 'main:create_ajax' %}", {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrf,
+                },
+                body: new FormData(document.querySelector("#CreateItemForm"))
+            }).then(refreshTable)
+
+            document.getElementById("CreateItemForm").reset()
+        }
+        ```
+    - Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan
+        + Ketika menekan tombol search / add item / add / min / remove, maka tabel akan terupdate secara asinkronus tanpa harus reload halaman 
