@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from main.models import Container, Item
 from main.forms import ItemForm, ContainerForm
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.urls import reverse
 from django.core import serializers
 from django.shortcuts import redirect
@@ -63,11 +63,11 @@ def create_container(request):
     return render(request, "create_container.html", context)
 
 def show_json(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json_by_id(request, id):
@@ -218,3 +218,35 @@ def create_item_ajax(request):
         return HttpResponse(b"CREATED", status=201)
     
     return HttpResponseNotFound()
+
+@csrf_exempt
+def show_json_container(request):
+    data = Container.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def show_json_item(request):
+    data = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_item_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        new_item = Item.objects.create(
+            user = request.user,
+            name = data["name"],
+            owner = data["owner"],
+            type = data["category"],
+            amount = int(data["amount"]),
+            weight = float(data["weight"]),
+            container = Container.objects.get(id=int(data["container"])),
+            description = data["description"]
+        )
+
+        new_item.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
